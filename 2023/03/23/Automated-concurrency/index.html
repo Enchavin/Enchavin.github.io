@@ -1,43 +1,234 @@
-const { Component } = require('inferno');
-const classname = require('hexo-component-inferno/lib/util/classname');
-const Head = require('./common/head');
-const Navbar = require('./common/navbar');
-const Widgets = require('./common/widgets');
-const Footer = require('./common/footer');
-const Scripts = require('./common/scripts');
-const Search = require('./common/search');
-
-module.exports = class extends Component {
-    render() {
-        const { site, config, page, helper, body } = this.props;
-
-        const language = page.lang || page.language || config.language;
-        const columnCount = Widgets.getColumnCount(config.widgets, config, page);
-
-        return <html lang={language ? language.substr(0, 2) : ''}>
-            <Head site={site} config={config} helper={helper} page={page} />
-            <body class={`is-${columnCount}-column`}>
-                <Navbar config={config} helper={helper} page={page} />
-                <section class="section">
-                    <div class="container">
-                        <div class="columns">
-                            <div class={classname({
-                                column: true,
-                                'order-2': true,
-                                'column-main': true,
-                                'is-12': columnCount === 1,
-                                'is-8-tablet is-8-desktop is-8-widescreen': columnCount === 2,
-                                'is-8-tablet is-8-desktop is-6-widescreen': columnCount === 3
-                            })} dangerouslySetInnerHTML={{ __html: body }}></div>
-                            <Widgets site={site} config={config} helper={helper} page={page} position={'left'} />
-                            <Widgets site={site} config={config} helper={helper} page={page} position={'right'} />
-                        </div>
-                    </div>
-                </section>
-                <Footer config={config} helper={helper} />
-                <Scripts site={site} config={config} helper={helper} page={page} />
-                <Search config={config} helper={helper} />
-            </body>
-        </html>;
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>关于Automated concurrency的近年进展调研 | Kaiwen Shi's Blog</title><meta name="author" content="Kaiwen Shi"><meta name="copyright" content="Kaiwen Shi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="123456graph LR;	A(Incorrectness logic &lt;br&#x2F;&gt; A novel concept) --&gt; B(Incorrectness separation logic &lt;br&#x2F;&gt; Incorrectness logic + Separation logic &lt;br&#x2F;&gt; Tool: Pulse);	B(Incorrectness">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Automated concurrency的近年进展调研">
+<meta property="og:url" content="http://skwkevin.com/2023/03/23/Automated-concurrency/index.html">
+<meta property="og:site_name" content="Kaiwen Shi&#39;s Blog">
+<meta property="og:description" content="123456graph LR;	A(Incorrectness logic &lt;br&#x2F;&gt; A novel concept) --&gt; B(Incorrectness separation logic &lt;br&#x2F;&gt; Incorrectness logic + Separation logic &lt;br&#x2F;&gt; Tool: Pulse);	B(Incorrectness">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-03-22T17:34:08.000Z">
+<meta property="article:modified_time" content="2023-03-22T17:43:31.626Z">
+<meta property="article:author" content="Kaiwen Shi">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="Incorrectness Separation Logic">
+<meta property="article:tag" content="Automation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://skwkevin.com/2023/03/23/Automated-concurrency/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
-};
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '关于Automated concurrency的近年进展调研',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-03-23 01:43:31'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Kaiwen Shi's Blog"><span class="site-name">Kaiwen Shi's Blog</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">关于Automated concurrency的近年进展调研</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-03-22T17:34:08.000Z" title="Created 2023-03-23 01:34:08">2023-03-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-03-22T17:43:31.626Z" title="Updated 2023-03-23 01:43:31">2023-03-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="关于Automated concurrency的近年进展调研"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">	A(Incorrectness logic &lt;br/&gt; A novel concept) --&gt; B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse);</span><br><span class="line">	B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br><span class="line">	B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse) --&gt; D(Finding real bugs in big programs &lt;br/&gt; Tool: Pulse-X);</span><br><span class="line">	E(Checking data race / OOPSLA 2018 &lt;br/&gt; Tool: RacerD 2018) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br><span class="line">	F(Checking deadlock / ASE 2021 &lt;br/&gt; Tool in Facebook ) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Any gaps exist?</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">	A(Iris&lt;br/&gt;) --&gt; B(Diaframe &lt;br/&gt; Automated? Verification of Fine-Grained Concurrent Programs in Iris);</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>Corresponding paper:</p>
+<p><em>Incorrectness Logic</em> (POPL 2020)</p>
+<p><em>Local Reasoning About the Presence of Bugs: Incorrectness Separation Logic</em> (CAV 2020)</p>
+<blockquote>
+<p>  Although such tools intuitively share ideas with correctness-based compositional analyses, the existing foundations of <strong>correctness-based analyses</strong> do not adequately explain what these <strong>bug-catchers</strong> do, why they work, or the extent to which they work in practice. A notable such example is the relation between separation logic (SL) and Infer.</p>
+</blockquote>
+<p><em>Concurrent Incorrectness Separation Logic</em> (POPL 2022)</p>
+<p><em>Finding Real Bugs in Big Programs with Incorrectness Logic</em> (OPASLA 2022)</p>
+<p><em><strong>Pulse</strong></em>: Memory and lifetime analysis</p>
+<p>Using it to detect <strong>memory safety bugs</strong>, namely null-pointer-dereference and use-after-free bugs.</p>
+<p>Pulse is an inter-procedural memory safety analysis. Pulse can detect, for instance, Null dereferences in Java. Errors are only reported when all conditions on the erroneous path are true regardless of input. Pulse should gradually replace the original bi-abduction analysis of Infer.</p>
+<p><em><strong>RacerD</strong></em>: Thread safety analysis (Not based on separation logic’s formalism)</p>
+<p>RacerD finds data races in C++/Objective C and Java code. This analysis does not attempt to prove the absence of concurrency issues, rather, it searches for a high-confidence class of data races.</p>
+<p>There are many types of concurrency issues out there that RacerD does not check for (but might in the future). Examples include deadlock, atomicity, and check-then-act bugs (shown below). You must look for these bugs yourself!</p>
+<p><em><strong>CISL</strong></em></p>
+<p>Inspired by the <strong>under-approximate analyses</strong> of RacerD and a deadlock detector.</p>
+<p>CISL framework: CISL<del>DC</del> (CISL with disjoint concurrency) for detecting memory safety bugs, CISL<del>RD</del> (CISL with race detection) for detecting races on shared memory, and CISL~DD&nbsp;~ (CISL with deadlock detection) for detecting deadlock scenarios.</p>
+<p><strong>CISLSV</strong> (sv怎么设计的)</p>
+<p><em><strong>Pulse-X</strong></em> (自动化怎么驱动的)</p>
+<p>A new, automatic program analysis for catching memory errors, based on ISL. 15 new real bugs in OpenSSL have been found, which we have reported to OpenSSL.</p>
+<p>接下来</p>
+<p><strong>CISL<del>SV</del></strong> (sv怎么设计的)</p>
+<p>Reasoning about the high-level (abstract) representation of the state</p>
+<p>the high-level states are typically modelled by a partial commutative monoid (PCM)</p>
+<p>CISL<del>DC</del> for disjoint concurrency, so what about shared concurrency? So using CISL<del>SV</del></p>
+<blockquote>
+<p>$with_\tau r\ do\ C$ 是 $acq_\tau r; C; rel_\tau$的简略表达</p>
+<p>$res_\mathcal{S}^r(\tau:n)$ describes the resources necessary for $\tau$ to acquire $r$ with subvariant $\mathcal{S}$, where $n$ denotes the contribution of $\tau$ on $r$: the number of times $\tau$ has accessed $r$.</p>
+</blockquote>
+<p>SV-CS<br>$$<br>\frac{\forall m\geq n. [p<em>\mathcal{S}(m)]\ C\ [ok: q</em>\mathcal{S}(m+1)]\quad stable(p, q)}{[p<em>res_\mathcal{S}^r(\tau:n)]\ with_\tau r\ do\ C\ [ok: q</em>res_\mathcal{S}^r(\tau:n+1)]}<br>$$</p>
+<p>permission: 表示当前线程$\tau$已经访问共享资源$r$的次数$n$。从线程的角度描述它所能访问的共享资源</p>
+<p>resource map: 记录了共享资源$r$，被哪个线程$o$所持有，此时的subvariant $\mathcal{S}$，和记录了已经访问该共享资源$r$的线程以及相关次数之间的映射$t$。从共享资源的角度描述</p>
+<p><em><strong>Pulse-X</strong></em> (自动化怎么驱动的)</p>
+<p><strong>CSL Family Tree</strong></p>
+<p>![image-20230321162541448](D:\Program Files (x86)\Typora\typora-user-images\image-20230321162541448.png)</p>
+<p>Some nature idea:</p>
+<p>Send / receive concurrency?</p>
+<p>Disjoint / shared concurrency get together?</p>
+<hr>
+<p>CISL as a parametric framework</p>
+<p>can be instantiated for a number of bug catching scenarios, including race detection, deadlock detection, and memory safety error detection</p>
+<p>detect that the subset of program behaviours has bugs</p>
+<ul>
+<li><p>no well-understood or unifying theory underpinning such under-approximate analyses</p>
+</li>
+<li><p>spend a significant amount of technical effort proving a no-false-positives(NFP) theorem, stating that the bugs found by the tool are indeed real bugs, and such theorem is customized</p>
+</li>
+<li><p>So need a unifying theory that underpins concurrent under-approximate reasoning(for proving incorrectness, i.e. the presence of bugs)</p>
+</li>
+<li><p>ISL only apply to sequential programs and do not support reasoning about concurrent bug catching analyses.</p>
+</li>
+</ul>
+<p>Why “parametric”?</p>
+<p>A disturbing trend for each new library or concurrency primitive to require a new separation logic.</p>
+<p>CISL allows us to prove triples of the form $[p]\ C\ [\epsilon :q]$, stating that <em>every</em> state in $q$ is reachable by executing $C$ starting in <em>some</em> state in $p$. The $\epsilon$ denotes an exit condition that may be either $\color{green}ok$ to denote normal (non-erroneous) execution, or $\epsilon \in \text{ErExit}$ to denote a buggy (erroneous) execution ($\text{ErExit}$ is supplied to CISL as a parameter to distinguish different classes of bugs such as memory safety errors, races and so forth).</p>
+<p>How does the $\text{L}$ come from?</p>
+<p>To better track memory safety errors and connect them to culprit instructions, we annotate instructions that may cause such errors with a label $\text{L} \in Label$. As we demonstrate shortly, when an error is encountered we report the label of the offending instruction (e.g. $\text{L}$).</p>
+<p>注意一下thread-locality</p>
+<p>CISL<del>SV</del> state: triple $s=(l, p, \rho)$, $l\in LState$ is a <em>local state</em>, $p\in Perm$ is a <em>permission</em> and $\rho\in RMap$ is a <em>shared resource map</em>.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://skwkevin.com">Kaiwen Shi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://skwkevin.com/2023/03/23/Automated-concurrency/">http://skwkevin.com/2023/03/23/Automated-concurrency/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Concurrency/">Concurrency</a><a class="post-meta__tags" href="/tags/Incorrectness-Separation-Logic/">Incorrectness Separation Logic</a><a class="post-meta__tags" href="/tags/Automation/">Automation</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/03/22/hello-world/" title="与Hexo的第一次尝试"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">与Hexo的第一次尝试</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kaiwen Shi</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/23/Automated-concurrency/" title="关于Automated concurrency的近年进展调研">关于Automated concurrency的近年进展调研</a><time datetime="2023-03-22T17:34:08.000Z" title="Created 2023-03-23 01:34:08">2023-03-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/03/22/hello-world/" title="与Hexo的第一次尝试">与Hexo的第一次尝试</a><time datetime="2023-03-22T14:37:57.819Z" title="Created 2023-03-22 22:37:57">2023-03-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Kaiwen Shi</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
