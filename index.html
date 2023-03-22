@@ -200,7 +200,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-03-23 01:34:08 / Modified: 01:41:45" itemprop="dateCreated datePublished" datetime="2023-03-23T01:34:08+08:00">2023-03-23</time>
+      <time title="Created: 2023-03-23 01:34:08 / Modified: 01:43:31" itemprop="dateCreated datePublished" datetime="2023-03-23T01:34:08+08:00">2023-03-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -245,15 +245,15 @@
 <p>There are many types of concurrency issues out there that RacerD does not check for (but might in the future). Examples include deadlock, atomicity, and check-then-act bugs (shown below). You must look for these bugs yourself!</p>
 <p><em><strong>CISL</strong></em></p>
 <p>Inspired by the <strong>under-approximate analyses</strong> of RacerD and a deadlock detector.</p>
-<p>CISL framework: CISL<sub>DC</sub> (CISL with disjoint concurrency) for detecting memory safety bugs, CISL<sub>RD</sub> (CISL with race detection) for detecting races on shared memory, and CISL<sub>DD </sub> (CISL with deadlock detection) for detecting deadlock scenarios.</p>
+<p>CISL framework: CISL<del>DC</del> (CISL with disjoint concurrency) for detecting memory safety bugs, CISL<del>RD</del> (CISL with race detection) for detecting races on shared memory, and CISL~DD ~ (CISL with deadlock detection) for detecting deadlock scenarios.</p>
 <p><strong>CISLSV</strong> (sv怎么设计的)</p>
 <p><em><strong>Pulse-X</strong></em> (自动化怎么驱动的)</p>
 <p>A new, automatic program analysis for catching memory errors, based on ISL. 15 new real bugs in OpenSSL have been found, which we have reported to OpenSSL.</p>
 <p>接下来</p>
-<p><strong>CISL<sub>SV</sub></strong> (sv怎么设计的)</p>
+<p><strong>CISL<del>SV</del></strong> (sv怎么设计的)</p>
 <p>Reasoning about the high-level (abstract) representation of the state</p>
 <p>the high-level states are typically modelled by a partial commutative monoid (PCM)</p>
-<p>CISL<sub>DC</sub> for disjoint concurrency, so what about shared concurrency? So using CISL<sub>SV</sub></p>
+<p>CISL<del>DC</del> for disjoint concurrency, so what about shared concurrency? So using CISL<del>SV</del></p>
 <blockquote>
 <p>$with_\tau r\ do\ C$ 是 $acq_\tau r; C; rel_\tau$的简略表达</p>
 <p>$res_\mathcal{S}^r(\tau:n)$ describes the resources necessary for $\tau$ to acquire $r$ with subvariant $\mathcal{S}$, where $n$ denotes the contribution of $\tau$ on $r$: the number of times $\tau$ has accessed $r$.</p>
@@ -287,7 +287,7 @@
 <p>How does the $\text{L}$ come from?</p>
 <p>To better track memory safety errors and connect them to culprit instructions, we annotate instructions that may cause such errors with a label $\text{L} \in Label$. As we demonstrate shortly, when an error is encountered we report the label of the offending instruction (e.g. $\text{L}$).</p>
 <p>注意一下thread-locality</p>
-<p>CISL<sub>SV</sub> state: triple $s=(l, p, \rho)$, $l\in LState$ is a <em>local state</em>, $p\in Perm$ is a <em>permission</em> and $\rho\in RMap$ is a <em>shared resource map</em>.</p>
+<p>CISL<del>SV</del> state: triple $s=(l, p, \rho)$, $l\in LState$ is a <em>local state</em>, $p\in Perm$ is a <em>permission</em> and $\rho\in RMap$ is a <em>shared resource map</em>.</p>
 
       
     </div>
