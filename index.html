@@ -200,7 +200,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-03-23 01:34:08 / Modified: 01:40:25" itemprop="dateCreated datePublished" datetime="2023-03-23T01:34:08+08:00">2023-03-23</time>
+      <time title="Created: 2023-03-23 01:34:08 / Modified: 01:41:45" itemprop="dateCreated datePublished" datetime="2023-03-23T01:34:08+08:00">2023-03-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -222,7 +222,73 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">	A(Incorrectness logic &lt;br/&gt; A novel concept) --&gt; B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse);</span><br><span class="line">	B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br><span class="line">	B(Incorrectness separation logic &lt;br/&gt; Incorrectness logic + Separation logic &lt;br/&gt; Tool: Pulse) --&gt; D(Finding real bugs in big programs &lt;br/&gt; Tool: Pulse-X);</span><br><span class="line">	E(Checking data race / OOPSLA 2018 &lt;br/&gt; Tool: RacerD 2018) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br><span class="line">	F(Checking deadlock / ASE 2021 &lt;br/&gt; Tool in Facebook ) --&gt; C(Concurrent Incorrectness separation logic &lt;br/&gt; Incorrectness separation logic + Concurrent separation logic);</span><br></pre></td></tr></table></figure>
+
+<p>Any gaps exist?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">	A(Iris&lt;br/&gt;) --&gt; B(Diaframe &lt;br/&gt; Automated? Verification of Fine-Grained Concurrent Programs in Iris);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Corresponding paper:</p>
+<p><em>Incorrectness Logic</em> (POPL 2020)</p>
+<p><em>Local Reasoning About the Presence of Bugs: Incorrectness Separation Logic</em> (CAV 2020)</p>
+<blockquote>
+<p>  Although such tools intuitively share ideas with correctness-based compositional analyses, the existing foundations of <strong>correctness-based analyses</strong> do not adequately explain what these <strong>bug-catchers</strong> do, why they work, or the extent to which they work in practice. A notable such example is the relation between separation logic (SL) and Infer.</p>
+</blockquote>
+<p><em>Concurrent Incorrectness Separation Logic</em> (POPL 2022)</p>
+<p><em>Finding Real Bugs in Big Programs with Incorrectness Logic</em> (OPASLA 2022)</p>
+<p><em><strong>Pulse</strong></em>: Memory and lifetime analysis</p>
+<p>Using it to detect <strong>memory safety bugs</strong>, namely null-pointer-dereference and use-after-free bugs.</p>
+<p>Pulse is an inter-procedural memory safety analysis. Pulse can detect, for instance, Null dereferences in Java. Errors are only reported when all conditions on the erroneous path are true regardless of input. Pulse should gradually replace the original bi-abduction analysis of Infer.</p>
+<p><em><strong>RacerD</strong></em>: Thread safety analysis (Not based on separation logic’s formalism)</p>
+<p>RacerD finds data races in C++/Objective C and Java code. This analysis does not attempt to prove the absence of concurrency issues, rather, it searches for a high-confidence class of data races.</p>
+<p>There are many types of concurrency issues out there that RacerD does not check for (but might in the future). Examples include deadlock, atomicity, and check-then-act bugs (shown below). You must look for these bugs yourself!</p>
+<p><em><strong>CISL</strong></em></p>
+<p>Inspired by the <strong>under-approximate analyses</strong> of RacerD and a deadlock detector.</p>
+<p>CISL framework: CISL<sub>DC</sub> (CISL with disjoint concurrency) for detecting memory safety bugs, CISL<sub>RD</sub> (CISL with race detection) for detecting races on shared memory, and CISL<sub>DD </sub> (CISL with deadlock detection) for detecting deadlock scenarios.</p>
+<p><strong>CISLSV</strong> (sv怎么设计的)</p>
+<p><em><strong>Pulse-X</strong></em> (自动化怎么驱动的)</p>
+<p>A new, automatic program analysis for catching memory errors, based on ISL. 15 new real bugs in OpenSSL have been found, which we have reported to OpenSSL.</p>
+<p>接下来</p>
+<p><strong>CISL<sub>SV</sub></strong> (sv怎么设计的)</p>
+<p>Reasoning about the high-level (abstract) representation of the state</p>
+<p>the high-level states are typically modelled by a partial commutative monoid (PCM)</p>
+<p>CISL<sub>DC</sub> for disjoint concurrency, so what about shared concurrency? So using CISL<sub>SV</sub></p>
+<blockquote>
+<p>$with_\tau r\ do\ C$ 是 $acq_\tau r; C; rel_\tau$的简略表达</p>
+<p>$res_\mathcal{S}^r(\tau:n)$ describes the resources necessary for $\tau$ to acquire $r$ with subvariant $\mathcal{S}$, where $n$ denotes the contribution of $\tau$ on $r$: the number of times $\tau$ has accessed $r$.</p>
+</blockquote>
+<p>SV-CS<br>$$<br>\frac{\forall m\geq n. [p<em>\mathcal{S}(m)]\ C\ [ok: q</em>\mathcal{S}(m+1)]\quad stable(p, q)}{[p<em>res_\mathcal{S}^r(\tau:n)]\ with_\tau r\ do\ C\ [ok: q</em>res_\mathcal{S}^r(\tau:n+1)]}<br>$$</p>
+<p>permission: 表示当前线程$\tau$已经访问共享资源$r$的次数$n$。从线程的角度描述它所能访问的共享资源</p>
+<p>resource map: 记录了共享资源$r$，被哪个线程$o$所持有，此时的subvariant $\mathcal{S}$，和记录了已经访问该共享资源$r$的线程以及相关次数之间的映射$t$。从共享资源的角度描述</p>
+<p><em><strong>Pulse-X</strong></em> (自动化怎么驱动的)</p>
+<p><strong>CSL Family Tree</strong></p>
+<p>![image-20230321162541448](D:\Program Files (x86)\Typora\typora-user-images\image-20230321162541448.png)</p>
+<p>Some nature idea:</p>
+<p>Send / receive concurrency?</p>
+<p>Disjoint / shared concurrency get together?</p>
+<hr>
+<p>CISL as a parametric framework</p>
+<p>can be instantiated for a number of bug catching scenarios, including race detection, deadlock detection, and memory safety error detection</p>
+<p>detect that the subset of program behaviours has bugs</p>
+<ul>
+<li><p>no well-understood or unifying theory underpinning such under-approximate analyses</p>
+</li>
+<li><p>spend a significant amount of technical effort proving a no-false-positives(NFP) theorem, stating that the bugs found by the tool are indeed real bugs, and such theorem is customized</p>
+</li>
+<li><p>So need a unifying theory that underpins concurrent under-approximate reasoning(for proving incorrectness, i.e. the presence of bugs)</p>
+</li>
+<li><p>ISL only apply to sequential programs and do not support reasoning about concurrent bug catching analyses.</p>
+</li>
+</ul>
+<p>Why “parametric”?</p>
+<p>A disturbing trend for each new library or concurrency primitive to require a new separation logic.</p>
+<p>CISL allows us to prove triples of the form $[p]\ C\ [\epsilon :q]$, stating that <em>every</em> state in $q$ is reachable by executing $C$ starting in <em>some</em> state in $p$. The $\epsilon$ denotes an exit condition that may be either $\color{green}ok$ to denote normal (non-erroneous) execution, or $\epsilon \in \text{ErExit}$ to denote a buggy (erroneous) execution ($\text{ErExit}$ is supplied to CISL as a parameter to distinguish different classes of bugs such as memory safety errors, races and so forth).</p>
+<p>How does the $\text{L}$ come from?</p>
+<p>To better track memory safety errors and connect them to culprit instructions, we annotate instructions that may cause such errors with a label $\text{L} \in Label$. As we demonstrate shortly, when an error is encountered we report the label of the offending instruction (e.g. $\text{L}$).</p>
+<p>注意一下thread-locality</p>
+<p>CISL<sub>SV</sub> state: triple $s=(l, p, \rho)$, $l\in LState$ is a <em>local state</em>, $p\in Perm$ is a <em>permission</em> and $\rho\in RMap$ is a <em>shared resource map</em>.</p>
+
       
     </div>
 
